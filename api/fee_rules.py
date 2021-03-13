@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import os
 
 
 class FeeRule(ABC):
@@ -12,7 +11,7 @@ class FeeRule(ABC):
 
 
 class InitialFeeRule(FeeRule):
-    MIN_DAYS_LATE = os.getenv('MIN_DAYS_LATE', 1)
+    MIN_DAYS_LATE = 1
     MAX_DAYS_LATE = 3
     PENALTY_RATE = 0.03
     INTEREST_RATE = 0.002
