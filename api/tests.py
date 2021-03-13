@@ -1,11 +1,13 @@
-from .services import BookService
-from django.test import TestCase
-from .models import Book, Client
 from datetime import date, timedelta
-from .exceptions import BorrowedBookException
-from rest_framework.test import APITestCase
+
+from django.test import TestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
+
 from .fee_rules import *
+from .models import Book, Client
+from .services import BookService
+from .exceptions import BorrowedBookException
 
 
 class BookTest(TestCase):

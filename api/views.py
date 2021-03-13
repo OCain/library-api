@@ -1,13 +1,14 @@
-from django.http.response import HttpResponseBadRequest, HttpResponseNotFound
 from django.http import HttpResponse
+from django.http.response import HttpResponseBadRequest
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .services import BookService
+
 from .exceptions import BorrowedBookException
-from .serializers import BorrowedBookSerializer, ClientSerializer, BookSerializer
 from .models import Client, Book
-import json
+from .serializers import BorrowedBookSerializer, ClientSerializer, BookSerializer
+from .services import BookService
 
 
 class ClientViewSet(viewsets.ModelViewSet):

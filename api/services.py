@@ -1,7 +1,8 @@
 from datetime import date
-from .models import Book, Client
+
 from .exceptions import BorrowedBookException
 from .fee_rules import *
+from .models import Book, Client
 
 
 class BookService:

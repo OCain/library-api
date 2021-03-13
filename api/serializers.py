@@ -1,7 +1,9 @@
 from typing import Any
-from .services import BookService
-from .models import Client, Book
+
 from rest_framework import serializers
+
+from .models import Client, Book
+from .services import BookService
 
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
