@@ -7,7 +7,7 @@ class FeeRule(ABC):
         pass
 
     def calculate_fee(self, days_late: int, penalty_rate: float, interest_rate: float) -> float:
-        return penalty_rate + (interest_rate * days_late)
+        return round(penalty_rate + (interest_rate * days_late), 3)
 
 
 class InitialFeeRule(FeeRule):

@@ -49,6 +49,24 @@ class BookServiceTest(TestCase):
         service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
         self.assertTrue(service.get_late_return_fee_percentage() > 0)
 
+    def test_1_day_late__percentage_fee(self):
+        late_days = 1
+        days = BookService.RESERVATION_DAYS + late_days
+        service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
+        self.assertEqual(service.get_late_return_fee_percentage(), 3.2)
+
+    def test_4_day_late__percentage_fee(self):
+        late_days = 4
+        days = BookService.RESERVATION_DAYS + late_days
+        service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
+        self.assertEqual(service.get_late_return_fee_percentage(), 6.6)
+
+    def test_4_day_late__percentage_fee(self):
+        late_days = 6
+        days = BookService.RESERVATION_DAYS + late_days
+        service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
+        self.assertEqual(service.get_late_return_fee_percentage(), 10.6)
+
     def test_return_within_reservation_deadline_should_not_have_fee_percentage_greater_than_zero_applied(self):
         days = BookService.RESERVATION_DAYS
         service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
@@ -130,14 +148,20 @@ class BookAPITest(APITestCase):
 
 class FeeRulesTest(TestCase):
 
+    def test_fee_rule_having_1_day_late_should_return_fee(self):
+        self.assertEquals(InitialFeeRule().get_fee(days_late=1), 0.032)
+
     def test_fee_rule_having_3_days_late_should_return_fee(self):
         self.assertEquals(InitialFeeRule().get_fee(days_late=3), 0.036)
 
     def test_fee_rule_having_4_days_late_should_return_fee(self):
         self.assertEquals(InitialFeeRule().get_fee(days_late=4), 0.066)
 
-    def test_last_fee_rule_having_10_days_late_should_return_fee(self):
+    def test_fee_rule_having_6_days_late_should_return_fee(self):
+        self.assertEquals(InitialFeeRule().get_fee(days_late=6), 0.106)
+
+    def test_fee_rule_having_10_days_late_should_return_fee(self):
         self.assertEquals(InitialFeeRule().get_fee(days_late=10), 0.13)
 
-    def test_last_fee_rule_having_0_days_late_should_return_zero_fee(self):
+    def test_fee_rule_having_0_days_late_should_return_zero_fee(self):
         self.assertEquals(InitialFeeRule().get_fee(days_late=0), 0)
