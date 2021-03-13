@@ -1,6 +1,6 @@
 # Agriness Developer Backend Challenge
 ## Desafio
-Criação de uma API REST em Python, utilizando o Django Rest Framework para controle de empréstimos de uma Livraria Online, de acordo com regras de negócio definidas pela Agriness.
+Criação de uma API REST em Python, utilizando o Django Rest Framework para controle de empréstimos de uma Livraria Online, de acordo com regras de negócio enviadas pela Agriness.
 
 ## Endpoints:
 ### Listagem de livros emprestados:
