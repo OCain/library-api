@@ -61,7 +61,7 @@ class BookServiceTest(TestCase):
         service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
         self.assertEqual(service.get_late_return_fee_percentage(), 6.6)
 
-    def test_4_day_late__percentage_fee(self):
+    def test_6_day_late__percentage_fee(self):
         late_days = 6
         days = BookService.RESERVATION_DAYS + late_days
         service = self.__create_service_with_borrowed_book_setting_borrowed_date(days_borrowed=days)
