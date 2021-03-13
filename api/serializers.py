@@ -21,21 +21,19 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
         return instance.get_status_display()
 
 
-
 class BorrowedBookSerializer(BookSerializer):
-    def __init__(self, instance):
-        self.instance = instance
-        self.service = BookService(instance)
 
-    days_late = serializers.SerializerMethodField('get_days_late')
-    late_return_fee_percentage = serializers.SerializerMethodField('get_late_return_fee_percentage')
+    days_late = serializers.SerializerMethodField()
+    late_return_fee_percentage = serializers.SerializerMethodField()
 
     class Meta:
         model = Book
         fields = ['id', 'title', 'author', 'borrowed_date', 'days_late', 'late_return_fee_percentage']
 
     def get_days_late(self, instance) -> int:
-        return self.service.get_days_late()
+        service = BookService(instance)
+        return service.get_days_late()
 
     def get_late_return_fee_percentage(self, instance) -> float:
-        return self.service.get_late_return_fee_percentage()
+        service = BookService(instance)
+        return service.get_late_return_fee_percentage()

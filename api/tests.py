@@ -83,46 +83,46 @@ class BookAPITest(APITestCase):
 
     def test_book_creation(self):
         data = {"author": "John Doe", "title": "Test Case"}
-        response = self.client.post("/books/", data)
+        response = self.client.post("/api/books/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_retrieve_books(self):
-        response = self.client.get("/books/")
+        response = self.client.get("/api/books/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_reserve_available_book(self):
         Client.objects.create(id=1)
         data = {"client_id": 1}
-        response = self.client.put("/books/5/reserve/", data)
+        response = self.client.put("/api/books/5/reserve/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_reserve_borrowed_book(self):
-        client = Client.objects.create(id=1)
-        self.book.borrow(client)
+        book_client = Client.objects.create(id=1)
+        self.book.borrow(book_client)
         self.book.save()
-        data = {"client_id": client.id}
-        response = self.client.patch("/books/5/reserve/", data)
+        data = {"client_id": book_client.id}
+        response = self.client.patch("/api/books/5/reserve/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_reserve_book_with_nonexistent_book_id(self):
-        client = Client.objects.create(id=1)
-        data = {"client_id": client.id}
-        response = self.client.patch("/books/55/reserve/", data)
+        book_client = Client.objects.create(id=1)
+        data = {"client_id": book_client.id}
+        response = self.client.patch("/api/books/55/reserve/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_reserve_book_with_nonexistent_client_id(self):
         data = {"client_id": 20}
-        response = self.client.patch("/books/5/reserve/", data)
+        response = self.client.patch("/api/books/5/reserve/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_list_borrowed_books(self):
-        client = Client.objects.create(id=1)
-        response = self.client.get("/client/1/books/")
+        Client.objects.create(id=1)
+        response = self.client.get("/api/client/1/books/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_list_borrowed_books_with_nonexistent_client_id(self):
-        client = Client.objects.create(id=1)
-        response = self.client.get("/client/2/books/")
+        Client.objects.create(id=1)
+        response = self.client.get("/api/client/2/books/")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 

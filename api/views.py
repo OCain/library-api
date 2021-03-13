@@ -1,7 +1,8 @@
-from django.http.response import HttpResponseBadRequest
+from django.http.response import HttpResponseBadRequest, HttpResponseNotFound
 from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from .services import BookService
 from .exceptions import BorrowedBookException
 from .serializers import BorrowedBookSerializer, ClientSerializer, BookSerializer
@@ -13,9 +14,12 @@ class ClientViewSet(viewsets.ModelViewSet):
     """
     Returns clients registered.
     """
-    queryset = Client.objects.all().order_by('name')
+    queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
+    def get_queryset(self):
+        return self.queryset.order_by("name")
+    
     @action(methods=['get'], detail=True)
     def books(self, request, pk=None):
         """
@@ -23,11 +27,8 @@ class ClientViewSet(viewsets.ModelViewSet):
         """
         try:
             client = Client.objects.get(pk=pk)
-            books = []
-            for book in client.book_set.all():
-                serialized_book = BorrowedBookSerializer(book).data
-                books.append(serialized_book)
-            return HttpResponse(json.dumps(books), content_type='application/json')
+            books = client.book_set.all()
+            return Response(BorrowedBookSerializer(books, many=True).data)
         except Client.DoesNotExist:
             return HttpResponseBadRequest("Client ID #{} does not exist!".format(pk))
 

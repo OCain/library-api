@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+import os
+
 
 class FeeRule(ABC):
     @abstractmethod
@@ -10,7 +12,7 @@ class FeeRule(ABC):
 
 
 class InitialFeeRule(FeeRule):
-    MIN_DAYS_LATE = 1
+    MIN_DAYS_LATE = os.getenv('MIN_DAYS_LATE', 1)
     MAX_DAYS_LATE = 3
     PENALTY_RATE = 0.03
     INTEREST_RATE = 0.002
@@ -46,5 +48,4 @@ class LastFeeRule(FeeRule):
     def get_fee(self, days_late: int) -> float:
         if days_late > self.PREVIOUS_MAX_DAYS_LATE:
             return super().calculate_fee(days_late, self.PENALTY_RATE, self.INTEREST_RATE)
-        else:
-            return 0
+        return 0
